@@ -47,4 +47,4 @@ coverage_report_md = '''
 {%endfor%}
 '''
 
-
+COMMAND_TIMEOUT_SECS=3600

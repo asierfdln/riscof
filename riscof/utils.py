@@ -10,6 +10,7 @@ import operator
 import shlex
 import ruamel
 from ruamel.yaml import YAML
+from riscof.constants import COMMAND_TIMEOUT_SECS
 #from riscof.log import logger
 
 
@@ -97,7 +98,7 @@ class makeUtil():
         with open(self.makefilePath,"a") as makefile:
             makefile.write("\n\n.PHONY : " + tname + "\n" + tname + " :\n\t"+command.replace("\n","\n\t"))
             self.targets.append(tname)
-    def execute_target(self,tname,cwd="./",timeout=300):
+    def execute_target(self,tname,cwd="./",timeout=COMMAND_TIMEOUT_SECS):
         """
         Function to execute a particular target only.
 
@@ -115,7 +116,7 @@ class makeUtil():
         assert tname in self.targets, "Target does not exist."
         return shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+tname).run(cwd=cwd,
                 timeout=timeout)
-    def execute_all(self,cwd="./",timeout=300):
+    def execute_all(self,cwd="./",timeout=COMMAND_TIMEOUT_SECS):
         """
         Function to execute all the defined targets.
 
@@ -205,7 +206,7 @@ class Command():
                 non-zero value.
         """
         kwargs.setdefault('shell', self._is_shell_command())
-        kwargs.setdefault('timeout', 300)
+        kwargs.setdefault('timeout', COMMAND_TIMEOUT_SECS)
         cwd = self._path2str(kwargs.get(
             'cwd')) if not kwargs.get('cwd') is None else self._path2str(
                 os.getcwd())
